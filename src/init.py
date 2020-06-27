@@ -19,6 +19,11 @@ import traceback
 
 
 
+
+devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+for device in devices:
+        print(device.path, device.name, device.phys)
+
 #creates object 'gamepad' to store the data
 #you can call it whatever you like
 gamepad = InputDevice('/dev/input/event1')
