@@ -42,9 +42,11 @@ def printToPaper(text):
 # IP address 
 def get_Host_name_IP(): 
     try: 
-        host_name = socket.gethostname() 
-        host_ip = socket.gethostbyname(host_name) 
-        printToPaper(host_name+' '+host_ip)
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        printToPaper(s.getsockname()[0])
+        s.close()
+        
     except: 
         print("Unable to get Hostname and IP") 
 
