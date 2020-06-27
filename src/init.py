@@ -28,8 +28,12 @@ selfieStickBtn = 115
 
 
 def printToPaper(text):
-    # Drawing on the image
+    logging.info("print to paper")
     epd = epd2in13_V2.EPD()
+    logging.info("init and Clear")
+    epd.init(epd.FULL_UPDATE)
+    epd.Clear(0xFF)
+    # Drawing on the image
     smallText = ImageFont.truetype(os.path.join(fontsDir, 'Poppins-SemiBold.ttf'), 18)
     #logging.info("1.Drawing on the image...")
     image = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame    
@@ -52,11 +56,12 @@ def get_Host_name_IP():
         print("Unable to get Hostname and IP") 
 
 def printWallpaper():
-    wallpaper = 'wallpaper-'+str(random.randint(1,4))+'.jpg'
+    logging.info("Wallpaper")
     epd = epd2in13_V2.EPD()
     logging.info("init and Clear")
     epd.init(epd.FULL_UPDATE)
     epd.Clear(0xFF)
+    wallpaper = 'wallpaper-'+str(random.randint(1,4))+'.jpg'
     logging.info("reading image file...")
     image = Image.open(os.path.join(wallpaperDir, wallpaper))
     epd.display(epd.getbuffer(image))
@@ -66,10 +71,9 @@ def printWallpaper():
 
 
 logging.basicConfig(level=logging.DEBUG)
-
+get_Host_name_IP()
 try:
     logging.info("Wallpaper-Pi")
-    get_Host_name_IP()
     #loop and filter by event code and print the mapped label
     for event in gamepad.read_loop():
         if event.type == ecodes.EV_KEY:
