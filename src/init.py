@@ -47,7 +47,7 @@ def printToPaper(text):
 # IP address 
 def get_Host_name_IP(): 
     try: 
-        ip = check_output(['hostname', '-I'])
+        ip = check_output(['hostname', '-I']).strip()
         print("IP :  ",ip) 
         hostnameIP = "IP : "+str(ip)
         printToPaper(hostnameIP)
