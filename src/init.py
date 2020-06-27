@@ -42,11 +42,8 @@ def printToPaper(text):
 # IP address 
 def get_Host_name_IP(): 
     try: 
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        socketName =s.getsockname()[0]
+        socketName = socket.gethostbyaddr(ip)
         printToPaper(str(socketName))
-        s.close()
         
     except: 
         print("Unable to get Hostname and IP") 
@@ -66,10 +63,10 @@ def printWallpaper():
 
 
 logging.basicConfig(level=logging.DEBUG)
-get_Host_name_IP()
+
 try:
     logging.info("Wallpaper-Pi")
-    
+    get_Host_name_IP()
     #loop and filter by event code and print the mapped label
     for event in gamepad.read_loop():
         if event.type == ecodes.EV_KEY:
