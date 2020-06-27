@@ -44,7 +44,8 @@ def get_Host_name_IP():
     try: 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
-        printToPaper(s.getsockname()[0])
+        socketName =s.getsockname()[0]
+        printToPaper(str(socketName))
         s.close()
         
     except: 
