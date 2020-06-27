@@ -1,5 +1,6 @@
 # Importing socket library 
-import socket 
+import socket
+import netifaces as ni 
 from evdev import InputDevice, categorize, ecodes
 import sys
 import os
@@ -46,11 +47,11 @@ def printToPaper(text):
 # IP address 
 def get_Host_name_IP(): 
     try: 
-        host_name = socket.gethostname() 
-        host_ip = socket.gethostbyname(host_name) 
-        print("Hostname :  ",host_name) 
-        print("IP : ",host_ip) 
-        printToPaper(str(host_ip))
+        ni.ifaddresses('eth0')
+        ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+        print("IP :  ",ip) 
+        hostnameIP = "IP : "+str(ip)
+        printToPaper(hostnameIP)
         
     except: 
         print("Unable to get Hostname and IP") 
