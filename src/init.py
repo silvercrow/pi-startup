@@ -17,7 +17,9 @@ import time
 from PIL import Image,ImageDraw,ImageFont
 import traceback
 
-
+devices = [evdev.InputDevice(path) for path in evdev.list_devices()]
+ for device in devices:
+     print(device.path, device.name, device.phys)
 
 #creates object 'gamepad' to store the data
 #you can call it whatever you like
@@ -39,7 +41,7 @@ def printToPaper(text):
     #logging.info("1.Drawing on the image...")
     image = Image.new('1', (epd.height, epd.width), 255)  # 255: clear the frame    
     draw = ImageDraw.Draw(image)
-    draw.text((10, 10), text, font = smallText, fill = 0)
+    draw.text((20, 5), text, font = smallText, fill = 0)
     epd.display(epd.getbuffer(image))
     time.sleep(2)
 
@@ -49,7 +51,7 @@ def get_Host_name_IP():
     try: 
         ip = check_output(['hostname', '-I']).strip()
         print("IP :  ",ip) 
-        hostnameIP = "IP : "+str(ip)
+        hostnameIP = str(ip)
         printToPaper(hostnameIP)
         
     except: 
