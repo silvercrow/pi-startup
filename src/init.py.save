@@ -2,16 +2,12 @@
 
 import socket
 import evdev
-import picamera
 from subprocess import check_output
 from evdev import InputDevice, categorize, ecodes
 import sys
 import os
 import random
-import datetime
-import time
 wallpaperDir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'wallpapers')
-cameraDir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'camera')
 fontsDir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'fonts')
 libdir = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'lib')
 if os.path.exists(libdir):
@@ -24,11 +20,28 @@ from PIL import Image,ImageDraw,ImageFont
 import traceback
 
 
-devices =[InputDevice(path) for path in evdev.list_devices()]
-for device in devices:
-    if str(device.name) == 'Selfie Stick AU-Z06 Consumer Control':
-        selfieStick = device
 
+devices =[InputDevice(path) for path in evdev.list_devices(
+
+
+print(devices)
+
+
+#creates object 'gamepad' to store the data
+#you can call it whatever you like
+device1 = InputDevice('/dev/input/event1')
+device2 = InputDevice('/dev/input/event2')
+device3 = InputDevice('/dev/input/event3')
+print("device1",device1)
+print("device2",device2)
+print("device3",device3)
+
+
+
+selfieStick = device2
+
+#prints out device info at start
+#print(gamepad)
 selfieStickBtn = 115
 
 
@@ -46,41 +59,7 @@ def printToPaper(text):
     draw.text((20, 5), text, font = smallText, fill = 0)
     epd.display(epd.getbuffer(image))
     time.sleep(2)
-    
-def printPicture(img):
-    logging.info("Wallpaper")
-    epd = epd2in13_V2.EPD()
-    logging.info("init and Clear")
-    epd.init(epd.FULL_UPDATE)
-    epd.Clear(0xFF)
-    logging.info("reading image file...")
-    image = Image.open(os.path.join(cameraDir, img))
-    epd.display(epd.getbuffer(image))
-    time.sleep(2)
-    logging.info("Goto Sleep...")
 
-
-
-def takeMyPicture():
-    date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    img = date+'.jpg'
-    logging.info("taking a picture :",img)
-    camera = picamera.PiCamera()
-    camera.resolution =(122,250)
-    #camera.brightness =(50)
-    #camera.contrast =(55)
-   # camera.iso=800
-    #camera.awb_mode='shade'
-    camera.image_effect='film'
-    camera.sharpness=(95)
-    camera.color_effects =(128,128)
-    camera.start_preview()
-    time.sleep(8)
-    camera.stop_preview()
-    camera.capture(os.path.join(cameraDir, img))
-    camera.close()
-    printPicture(img)
-    
 # Function to display hostname and 
 # IP address 
 def get_Host_name_IP(): 
@@ -106,11 +85,10 @@ def printWallpaper():
     time.sleep(2)
     logging.info("Goto Sleep...")
 
+
+
 logging.basicConfig(level=logging.DEBUG)
 get_Host_name_IP()
-
-
-
 try:
     logging.info("Wallpaper-Pi")
     #loop and filter by event code and print the mapped label
@@ -118,8 +96,7 @@ try:
         if event.type == ecodes.EV_KEY:
             if event.value == 1:
                 if event.code == selfieStickBtn:
-                   takeMyPicture()
-                   #printWallpaper()
+                    printWallpaper()
     
 except IOError as e:
     logging.info(e)
